@@ -1,0 +1,2 @@
+class QueueJob < ApplicationRecord
+end

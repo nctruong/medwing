@@ -1,7 +1,41 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+Thermostat.create!([
+                       {household_token: "tuoD8XQtuJ3BwY6ztRa7XCWo", location: "HCM"},
+                       {household_token: "ax42kN41wL1KCXAosTPq8qJQ", location: "loc1"},
+                       {household_token: "nAzG32c7ADXBJJdsxmc1AakM", location: "loc2"},
+                       {household_token: "FVdEnrawHw8W76U9GbaurPxz", location: "loc3"},
+                       {household_token: "L4yDp6QC7nfJu94vA5hCdUhE", location: "loc4"},
+                       {household_token: "nQiRuPwjQGRNpQTnPb9JvRdV", location: "loc5"}
+                   ])
+Reading.create!([
+  {number: 8, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 9, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 10, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 11, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 12, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 13, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 14, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 15, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 16, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 17, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 18, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 19, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 20, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 21, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 22, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 23, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 24, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 25, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 26, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 27, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 28, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 29, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 30, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 31, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 32, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 33, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 34, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 35, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 36, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1},
+  {number: 37, temperature: 30.2, humidity: 50.0, battery_charge: 33.2, thermostat_id: 1}
+])
+

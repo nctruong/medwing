@@ -1,5 +1,4 @@
-module SequenceServices
-  class SeqToken < Base
+class SequenceServices::SeqToken < SequenceServices::Base
     def initialize(options = {})
       key = options[:household_token] || 'household_token'
       super(key: key)
@@ -12,5 +11,4 @@ module SequenceServices
     def get
       super.to_i
     end
-  end
 end

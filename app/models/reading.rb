@@ -12,7 +12,7 @@ class Reading < ApplicationRecord
   # making sure seq is always updated before saving
   def update_seq
     if self.thermostat.present?
-      seq_token = SequenceServices::SeqToken.new(household_token: self.thermostat.household_token)
+      seq_token = ::SequenceServices::SeqToken.new(household_token: self.thermostat.household_token)
       self.number = seq_token.get.nil? ? seq_token.set(1) : (seq_token.get + 1)
       seq_token.set(self.number.to_s)
     else

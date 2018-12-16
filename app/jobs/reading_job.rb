@@ -3,6 +3,7 @@ class ReadingJob < ApplicationJob
 
   def perform(options)
     puts "creating reading...with options: #{options}"
+
     r = Reading.create(options)
     puts "id: #{r.id}, seq: #{r.number}"
   rescue => e
