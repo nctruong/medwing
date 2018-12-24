@@ -1,24 +1,13 @@
-# README
+## Instruction
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Installation
+- Redis
+- RabbitMQ: http://www.rabbitmq.com/install-homebrew.html
 
-Things you may want to cover:
+### Test
+- Starting redis first.
+- Bundle exec rspec
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- Why sneakers?
+https://github.com/jondot/sneakers/wiki/Why-i-built-it#sneakers
+https://blog.stanko.io/rabbitmq-is-more-than-a-sidekiq-replacement-b730d8176fb

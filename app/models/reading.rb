@@ -8,6 +8,10 @@ class Reading < ApplicationRecord
 
   before_validation :update_seq
 
+  scope :order_by_token_seq, -> {
+    includes(:thermostat).order("thermostats.household_token asc, readings.number asc")
+  }
+
   # retrieve in queue for consistent data
   # making sure seq is always updated before saving
   def update_seq

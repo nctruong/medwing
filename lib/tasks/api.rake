@@ -4,7 +4,8 @@ task post_reading: :environment do
   Sidekiq.redis { |con| con.flushdb }
   reading_service = ApiServices::ReadingService.new
   th1 = Thread.new do
-    10.times do
+    # 10.times do
+    loop do
       reading_service.post(
         temperature: 30.2,
         humidity: 50,
@@ -15,7 +16,7 @@ task post_reading: :environment do
   end
 
   th2 = Thread.new do
-    10.times do
+    loop do
       reading_service.post(
           temperature: 30.2,
           humidity: 50,
