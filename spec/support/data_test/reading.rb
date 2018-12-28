@@ -23,7 +23,7 @@ module DataTest
       end
 
       def attributes
-        FactoryBot.attributes_for(:reading)
+        FactoryBot.attributes_for(:readings)
       end
     end
     extend ClassMethods

@@ -10,25 +10,25 @@ class ReadingsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should create reading" do
+  test "should create readings" do
     assert_difference('Reading.count') do
-      post readings_url, params: { reading: { battery_charge: @reading.battery_charge, humidity: @reading.humidity, number: @reading.number, temperature: @reading.temperature } }, as: :json
+      post readings_url, params: {readings: {battery_charge: @reading.battery_charge, humidity: @reading.humidity, number: @reading.number, temperature: @reading.temperature } }, as: :json
     end
 
     assert_response 201
   end
 
-  test "should show reading" do
+  test "should show readings" do
     get reading_url(@reading), as: :json
     assert_response :success
   end
 
-  test "should update reading" do
-    patch reading_url(@reading), params: { reading: { battery_charge: @reading.battery_charge, humidity: @reading.humidity, number: @reading.number, temperature: @reading.temperature } }, as: :json
+  test "should update readings" do
+    patch reading_url(@reading), params: {readings: {battery_charge: @reading.battery_charge, humidity: @reading.humidity, number: @reading.number, temperature: @reading.temperature } }, as: :json
     assert_response 200
   end
 
-  test "should destroy reading" do
+  test "should destroy readings" do
     assert_difference('Reading.count', -1) do
       delete reading_url(@reading), as: :json
     end

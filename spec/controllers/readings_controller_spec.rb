@@ -3,12 +3,12 @@ require 'rails_helper'
 RSpec.describe ReadingsController, type: :controller do
   let(:thermostat) { create(:thermostat) }
   let(:reading_params) {
-    attributes_for(:reading).merge(thermostat_id: thermostat.id)
+    attributes_for(:readings).merge(thermostat_id: thermostat.id)
   }
   describe '#POST' do
     context 'valid household token' do
       it 'creates successfully' do
-        post :create, params: { reading: reading_params }
+        post :create, params: {readings: reading_params }
         expect(response.status).to eq(200)
       end
 

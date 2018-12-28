@@ -7,7 +7,7 @@ module ApiServices
     private
 
     def get_params(reading_params, extra_params = {})
-      { query: { reading: reading_params }} #.merge(extra_params)
+      { query: {readings: reading_params }} #.merge(extra_params)
     end
   end
 end
