@@ -41,16 +41,16 @@ logger.level = Logger::INFO
 
 
 task test_reading: :environment do
-  20.times do
-    id = RabbitmqServices::Reading.post({
+  reading_service = ApiServices::ReadingService.new
+  2000.times do
+    puts "#{i = i || 0 + 1}"
+    id = reading_service.post({
                                   temperature: 30.2,
                                   humidity: 50,
                                   battery_charge: 33.2,
                                   thermostat_id: 1 })
-    res = RabbitmqServices::Reading.get(id)
-    puts "result for id##{id}: #{res}"
-    # pool.remove(id)
-    id += 1
+    puts id
+    # RabbitmqServices::Reading.get(id)
   end
 end
 

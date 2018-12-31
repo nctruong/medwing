@@ -4,6 +4,7 @@ default: &default
   encoding: unicode
   host: localhost
   pool: 40
+  timeout: 60000
   username: postgres
   password: postgres
 

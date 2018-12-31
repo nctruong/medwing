@@ -1,5 +1,5 @@
 class ReadingsController < ApplicationController
-  before_action :set_reading, only: [:show, :update, :destroy]
+  before_action :set_reading, only: [:show]
 
   def show
     render json: @reading
@@ -7,14 +7,14 @@ class ReadingsController < ApplicationController
 
   def create
     # job_info = ReadingJob.perform_later(reading_params.to_h)
-    job_info = ReadingWorker.perform_later(reading_params.to_h)
+    id = RabbitmqServices::Reading.post(reading_params.to_h)
     # byebug
-    render json: { job_info: job_info.to_s }, status: 200
+    render json: { id: id }, status: 200
   end
 
   private
     def set_reading
-      @reading = Reading.find(params[:id])
+      @reading = RabbitmqServices::Reading.get(params[:id])
     end
 
     def reading_params

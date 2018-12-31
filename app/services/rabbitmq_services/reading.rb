@@ -1,12 +1,25 @@
 module RabbitmqServices
 
   class Reading < Base
-    TIMEOUT = 1
+
     RABBITMQ_OPTIONS = {
       channel: 'medwing',
       exchange: 'medwing.readings',
+      delayed_exchange: {
+        # publisher: {
+        #   exchange: 'delayed.exchange',
+        #   exchange_options: {
+        #     type: 'x-delayed-message',
+        #     arguments: { 'x-delayed-type' => 'direct' },
+        #     durable: true,
+        #     auto_delete: false
+        #   },
+        # },
+        headers: { 'x-delay': 1000 }
+      },
       queues: {
-        create: 'readings.create'
+        create: 'readings.create',
+        delete: 'readings.delete'
       }
     }
 
@@ -16,8 +29,13 @@ module RabbitmqServices
         publish_to_queue(reading_attributes)
       end
 
+      def delete(id)
+        # Sneakers::Publisher.new(RABBITMQ_OPTIONS[:delayed_exchange][:publisher])
+        $delayed_exchange.publish(id,
+                   headers: RABBITMQ_OPTIONS[:delayed_exchange][:headers], routing_key: RABBITMQ_OPTIONS[:queues][:delete]);
+      end
+
       def get(id)
-        set_looking_id(id)
         grab_result(id)
       rescue Timeout::Error
         @rabbitmq_logger.info("READING") { "Reading##{id}: Timeout in #{TIMEOUT} seconds" }
@@ -25,19 +43,14 @@ module RabbitmqServices
 
       private
 
-        def set_looking_id(id)
-          RedisServices::ReadingPool.add(id)
-        end
-
         def grab_result(id)
           result = {}
-          Timeout.timeout(TIMEOUT) do
-            until result.present? do
-              result = ::Reading.find_by(id: id)
-              result ||= RedisServices::ReadingPool.get_result(id)
+          puts "-------------------------------------------------------------------"
+          Benchmark.bm do |x|
+            x.report do
+              result = RedisServices::ReadingPool.get_result(id) || ::Reading.find_by(id: id)
             end
           end
-          yield(result) if block_given?
           result
         end
 
@@ -49,22 +62,14 @@ module RabbitmqServices
           id
         end
 
-        def open_connection
-          connection = Bunny.new
-          connection.start
-          channel = connection.create_channel
-          yield(channel) if block_given?
-          connection.close
-        end
-
         def publish_to_queue(reading_attributes)
           id = RedisServices::ReadingPool.nextId
-          open_connection do |channel|
-            channel.exchange(RABBITMQ_OPTIONS[:exchange], { durable: true }).publish(
-                reading_attributes.merge(id: id).to_json, routing_key: RABBITMQ_OPTIONS[:queues][:create]
-            )
-            RedisServices::ReadingPool.save_lastId(id)
-          end
+          # channel = $bunny_conn.create_channel
+          $post_queue.publish(
+              reading_attributes.merge(id: id).to_json, routing_key: RABBITMQ_OPTIONS[:queues][:create]
+          )
+          # channel.close
+          RedisServices::ReadingPool.save_lastId(id)
           id
         end
     end
