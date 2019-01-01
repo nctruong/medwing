@@ -7,10 +7,10 @@ Sneakers.configure :amqp => 'amqp://guest:guest@127.0.0.1:5672',
     :threads => 10,               # Threadpool size (good to match prefetch)
     :durable => true,               # Is queue durable?
     :workers => 1,
-    :ack => true,                # Must we acknowledge?
+    :ack => true                # Must we acknowledge?
     # :log => "log/sneakers.log",
-    :heartbeat => 2,              # Keep a good connection with broker
-    :hooks => {},                 # prefork/postfork hooks
-    :start_worker_delay => 10     # Delay between thread startup
+    # :heartbeat => 2,              # Keep a good connection with broker
+    # :hooks => {}                 # prefork/postfork hooks
+    # :start_worker_delay => 10     # Delay between thread startup
 
 # Sneakers.logger.level = Logger::INFO # the default DEBUG is too noisy

@@ -41,15 +41,23 @@ logger.level = Logger::INFO
 
 
 task test_reading: :environment do
-  reading_service = ApiServices::ReadingService.new
-  2000.times do
-    puts "#{i = i || 0 + 1}"
-    id = reading_service.post({
+  api_service = ApiServices::ReadingService.new
+  10.times { Thermostat.create(location: "HCM")}
+  thermostats = Thermostat.all
+  10.times do |t|
+    data = api_service.post({
                                   temperature: 30.2,
                                   humidity: 50,
                                   battery_charge: 33.2,
-                                  thermostat_id: 1 })
-    puts id
+                                  thermostat_id: thermostats.sample.id })
+    puts "* #{t + 1}, id: #{data['id']}"
+    puts RabbitmqServices::Reading.get(data['id'])
+    # do |result|
+    #   # puts "result: " << (result || 'NULL')
+    #   # byebug
+    #   p result
+    #   # puts "thermostat_id: #{(result.present? ? JSON.parse(result.gsub("=>",":"))['thermostat_id'] : 'NOT FOUND')}"
+    # end
     # RabbitmqServices::Reading.get(id)
   end
 end

@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :readings do
+  factory :reading do
     temperature { 30.2 }
     humidity { 50 }
     battery_charge { 33.2 }

@@ -2,7 +2,7 @@ class ReadingsController < ApplicationController
   before_action :set_reading, only: [:show]
 
   def show
-    render json: @reading
+    render json: @reading.thermostat
   end
 
   def create

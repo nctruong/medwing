@@ -1,13 +1,13 @@
 module DataTest
   class Reading
     module ClassMethods
-      def create(num_of_thread = 5, records_for_each = 20)
-        threads = []
-        num_of_thread.times do
-          thermostat = FactoryBot.create(:thermostat)
-          threads << Thread.new { perform_job(thermostat.id, records_for_each) }
+      def create(records)
+        reading_service = ApiServices::ReadingService.new
+        10.times { FactoryBot.create(:thermostat) }
+        records.times do
+          id = reading_service.post(attributes.merge(thermostat_id: Thermostat.all.sample.id))
+          puts id
         end
-        threads.each(&:join)
       end
 
       def all
@@ -16,14 +16,8 @@ module DataTest
 
       private
 
-      def perform_job(thermostat_id, quantity)
-        quantity.times {
-          ::ReadingJob.perform_now(attributes.merge(thermostat_id: thermostat_id))
-        }
-      end
-
       def attributes
-        FactoryBot.attributes_for(:readings)
+        FactoryBot.attributes_for(:reading)
       end
     end
     extend ClassMethods

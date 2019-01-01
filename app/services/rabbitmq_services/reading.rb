@@ -2,19 +2,20 @@ module RabbitmqServices
 
   class Reading < Base
 
-    RABBITMQ_OPTIONS = {
+    OPTIONS = {
       channel: 'medwing',
       exchange: 'medwing.readings',
       delayed_exchange: {
-        # publisher: {
-        #   exchange: 'delayed.exchange',
-        #   exchange_options: {
-        #     type: 'x-delayed-message',
-        #     arguments: { 'x-delayed-type' => 'direct' },
-        #     durable: true,
-        #     auto_delete: false
-        #   },
-        # },
+        publisher: {
+          connection: $bunny_conn,
+          exchange: 'delayed.exchange',
+          exchange_options: {
+            type: 'x-delayed-message',
+            arguments: { 'x-delayed-type' => 'direct' },
+            durable: true,
+            auto_delete: false
+          },
+        },
         headers: { 'x-delay': 1000 }
       },
       queues: {
@@ -26,32 +27,31 @@ module RabbitmqServices
     class << self
 
       def post(reading_attributes)
-        publish_to_queue(reading_attributes)
+        id = publish_to_queue(reading_attributes)
+        RedisServices::ReadingPool.set_result(id, reading_attributes)
+        id
       end
 
       def delete(id)
-        # Sneakers::Publisher.new(RABBITMQ_OPTIONS[:delayed_exchange][:publisher])
-        $delayed_exchange.publish(id,
-                   headers: RABBITMQ_OPTIONS[:delayed_exchange][:headers], routing_key: RABBITMQ_OPTIONS[:queues][:delete]);
+        Sneakers::Publisher.new(OPTIONS[:delayed_exchange][:publisher])
+          .publish(id, headers: OPTIONS[:delayed_exchange][:headers], routing_key: OPTIONS[:queues][:delete]);
       end
 
       def get(id)
-        grab_result(id)
-      rescue Timeout::Error
-        @rabbitmq_logger.info("READING") { "Reading##{id}: Timeout in #{TIMEOUT} seconds" }
+        result = grab_result(id)
+        block_given? ? yield(result) : result
       end
 
       private
 
         def grab_result(id)
-          result = {}
-          puts "-------------------------------------------------------------------"
-          Benchmark.bm do |x|
-            x.report do
-              result = RedisServices::ReadingPool.get_result(id) || ::Reading.find_by(id: id)
-            end
-          end
-          result
+          # Benchmark.bm do |x|
+          #   x.report do
+          # byebug
+          RedisServices::ReadingPool.get_result(id) || ::Reading.find_by(id: id)
+          #   end
+          # end
+          # result.to_json if result.present?
         end
 
         def get_id
@@ -66,7 +66,7 @@ module RabbitmqServices
           id = RedisServices::ReadingPool.nextId
           # channel = $bunny_conn.create_channel
           $post_queue.publish(
-              reading_attributes.merge(id: id).to_json, routing_key: RABBITMQ_OPTIONS[:queues][:create]
+              reading_attributes.merge(id: id).to_json, routing_key: OPTIONS[:queues][:create]
           )
           # channel.close
           RedisServices::ReadingPool.save_lastId(id)

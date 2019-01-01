@@ -3,10 +3,11 @@ require 'rails_helper'
 RSpec.describe 'integration' do
   include Helpers::Printer
 
-  before(:each) { DataTest::Reading.create }
+  before(:each) { DataTest::Reading.create(100) }
 
   describe '#POST' do
     it 'creates exact 100 records by default' do
+      sleep 10
       expect(Reading.count).to eq(100)
     end
 
