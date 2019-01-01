@@ -1,11 +1,28 @@
 module RedisServices::Readings
   module Result
-    def get_result(id)
-      Redis.current.get(result_key(id))
+    def find_by(opts = {})
+      if opts[:reading_id].present? && opts[:thermostat_id].present?
+        Redis.current.get(result_key(opts[:reading_id], opts[:thermostat_id]))
+      elsif opts[:reading_id].present?
+        key = Redis.current.keys("readings.#{opts[:reading_id]}-*").first
+        Redis.current.get(key)
+      else
+        raise "Require at least reading_id"
+      end
     end
 
-    def set_result(id, result)
-      Redis.current.set(result_key(id), result)
+    def where(opts = {})
+      if opts[:thermostat_id].present?
+        keys = Redis.current.keys("readings.*-#{opts[:thermostat_id]}")
+        keys.collect { |key| Redis.current.get(key) }
+      else
+        raise "Only allow to query by thermostat id"
+      end
+    end
+
+    def create(reading_id, result)
+      thermostat_id = result['thermostat_id']
+      Redis.current.set(result_key(reading_id, thermostat_id), result)
     end
   end
 end

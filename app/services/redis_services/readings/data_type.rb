@@ -1,10 +1,11 @@
 module RedisServices::Readings
   module DataType
-    def json_to_string(data)
+    def self.json_to_string(data)
+      data.to_s
     end
 
-    def string_to_json(data)
-      JSON.parse(data)
+    def self.string_to_json(data)
+      JSON.parse(data&.gsub('=>',':'))
     end
   end
 end

@@ -1,8 +1,8 @@
 module ReadingWorkers
   class PostWorker
     include Sneakers::Worker
-    from_queue RabbitmqServices::Reading::RABBITMQ_OPTIONS[:queues][:create],
-               exchange: RabbitmqServices::Reading::RABBITMQ_OPTIONS[:exchange], durable: true,
+    from_queue RabbitmqServices::Reading::OPTIONS[:queues][:create],
+               exchange: RabbitmqServices::Reading::OPTIONS[:exchange], durable: true,
                'x-queue-mode': 'lazy'
 
     def work(options)

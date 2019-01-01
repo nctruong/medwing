@@ -1,7 +1,7 @@
 module ReadingWorkers
   class DeleteWorker
     include Sneakers::Worker
-    from_queue RabbitmqServices::Reading::RABBITMQ_OPTIONS[:queues][:delete],
+    from_queue RabbitmqServices::Reading::OPTIONS[:queues][:delete],
                'x-queue-mode': 'lazy'
 
     def work(id)

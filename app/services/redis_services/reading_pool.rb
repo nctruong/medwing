@@ -12,7 +12,7 @@ module RedisServices
       def options
         {
           key: 'readings.look4ids',
-          value: 'readings.result-',
+          value: 'readings.',
           lastId: 'readings.last_id',
           pattern: ','
         }
@@ -20,8 +20,8 @@ module RedisServices
 
       private
 
-      def result_key(id)
-        options[:value] << id.to_s
+      def result_key(reading_id, thermostat_id)
+        "#{options[:value]}#{reading_id}#{thermostat_id.present? ? ('-' << thermostat_id.to_s) : ''}"
       end
     end
   end

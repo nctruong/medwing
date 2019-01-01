@@ -39,7 +39,7 @@ class ThermostatsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+    # Use callbacks to share util_queries setup or constraints between actions.
     def set_thermostat
       @thermostat = Thermostat.find(params[:id])
     end

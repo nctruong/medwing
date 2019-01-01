@@ -28,7 +28,7 @@ module RabbitmqServices
 
       def post(reading_attributes)
         id = publish_to_queue(reading_attributes)
-        RedisServices::ReadingPool.set_result(id, reading_attributes)
+        RedisServices::ReadingPool.create(id, reading_attributes)
         id
       end
 
@@ -39,7 +39,7 @@ module RabbitmqServices
 
       def get(id)
         result = grab_result(id)
-        block_given? ? yield(result) : result
+        block_given? ? yield(result) : RedisServices::Readings::DataType.string_to_json(result)
       end
 
       private
@@ -48,7 +48,7 @@ module RabbitmqServices
           # Benchmark.bm do |x|
           #   x.report do
           # byebug
-          RedisServices::ReadingPool.get_result(id) || ::Reading.find_by(id: id)
+          RedisServices::ReadingPool.find_by(reading_id: id) || ::Reading.find_by(id: id)
           #   end
           # end
           # result.to_json if result.present?
