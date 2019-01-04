@@ -1,5 +1,6 @@
 module RedisServices::Readings
   module Result
+    # Find by reading_id
     def find_by(opts = {})
       if opts[:reading_id].present? && opts[:thermostat_id].present?
         Redis.current.get(result_key(opts[:reading_id], opts[:thermostat_id]))
@@ -11,6 +12,7 @@ module RedisServices::Readings
       end
     end
 
+    # Find by thermostat_id, returns an array
     def where(opts = {})
       if opts[:thermostat_id].present?
         keys = Redis.current.keys("readings.*-#{opts[:thermostat_id]}")

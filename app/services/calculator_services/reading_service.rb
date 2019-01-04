@@ -21,10 +21,17 @@ module CalculatorServices
             opts[:thermostat_id] ? "thermostat_id = #{opts[:thermostat_id]}" : '')
       end
 
-      def average_from_pending_jobs(attributes, opts = {})
+      def average_from_pending_jobs(attributes, thermostat_id)
         avg = {}
-        attributes.each do |attr|
-          avg[attr] = 0
+        readings = RedisServices::ReadingPool.where(thermostat_id: thermostat_id)
+        readings.replace(readings.collect { |reading| RedisServices::Readings::DataType.string_to_json(reading) })
+        count = readings&.size
+        unless readings.blank?
+          attributes.each do |attr|
+            sum = 0
+            readings.each { |reading| sum += reading[attr]&.to_i || 0 }
+            avg[attr] = sum / count
+          end
         end
         avg
       end
