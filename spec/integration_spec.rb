@@ -7,7 +7,8 @@ RSpec.describe 'integration' do
 
   describe '#POST' do
     it 'creates exact 100 records by default' do
-      sleep 10
+      # sleep 10
+      byebug
       expect(Reading.count).to eq(100)
     end
 

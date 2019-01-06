@@ -54,22 +54,12 @@ module RabbitmqServices
           # result.to_json if result.present?
         end
 
-        def get_id
-          redis_id = Redis.current.get('readings.last_id')
-          db_id = (::Reading.maximum(:id)&.next || 1)
-          id = redis_id || db_id
-          Redis.current.set('readings.last_id', id)
-          id
-        end
-
         def publish_to_queue(reading_attributes)
           id = RedisServices::ReadingPool.nextId
-          # channel = $bunny_conn.create_channel
           $post_queue.publish(
               reading_attributes.merge(id: id).to_json, routing_key: OPTIONS[:queues][:create]
           )
-          # channel.close
-          RedisServices::ReadingPool.save_lastId(id)
+          RedisServices::ReadingPool.save_last_id(id)
           id
         end
     end

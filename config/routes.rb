@@ -4,5 +4,5 @@ Rails.application.routes.draw do
 
   post 'readings', to: 'readings#create'
   get 'readings/:id', to: 'readings#show'
-  get 'stats', to: 'stats#index'
+  get 'stats', to: 'stats#average'
 end

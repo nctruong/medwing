@@ -1,5 +1,5 @@
 module RedisServices::Readings
-  module Result
+  module Queries
     # Find by reading_id
     def find_by(opts = {})
       if opts[:reading_id].present? && opts[:thermostat_id].present?

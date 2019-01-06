@@ -31,6 +31,9 @@ end
 group :test do
   gem 'rspec-sidekiq'
   gem 'database_cleaner', '~> 1.7.0'
+  gem 'capybara'
+  gem 'selenium-webdriver'
+  gem 'chromedriver-helper'
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
@@ -45,3 +48,4 @@ gem 'json'
 gem 'sneakers'
 gem 'rabbitmq_http_api_client', '>= 1.9.1'
 gem 'dotenv-rails'
+gem 'foreman'

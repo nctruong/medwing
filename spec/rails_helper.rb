@@ -12,14 +12,13 @@ rescue ActiveRecord::PendingMigrationError => e
   exit 1
 end
 
-Sidekiq::Testing.disable!
-
 RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
   config.use_transactional_fixtures = true
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
   config.include FactoryBot::Syntax::Methods
+  config.include Rails.application.routes.url_helpers
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
@@ -33,13 +32,16 @@ RSpec.configure do |config|
   end
 end
 
-RSpec::Sidekiq.configure do |config|
-  # Clears all job queues before each example
-  config.clear_all_enqueued_jobs = true # default => true
-
-  # Whether to use terminal colours when outputting messages
-  config.enable_terminal_colours = true # default => true
-
-  # Warn when jobs are not enqueued to Redis but to a job array
-  config.warn_when_jobs_not_processed_by_sidekiq = true # default => true
+# Capybara
+require 'capybara/rspec'
+require 'capybara/rails'
+require 'puma'
+Capybara.register_driver :chrome do |app|
+  Capybara::Selenium::Driver.new(app, browser: :chrome)
+end
+Capybara.javascript_driver = :chrome
+Capybara.register_server("puma") do |app, port|
+  server = Puma::Server.new(app)
+  server.add_tcp_listener(Capybara.server_host, port)
+  server.run
 end

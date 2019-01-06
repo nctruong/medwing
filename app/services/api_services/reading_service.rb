@@ -1,7 +1,7 @@
 module ApiServices
   class ReadingService < Base
     def post(reading_params)
-      self.class.post("/readings", get_params({ readings: reading_params }))
+      self.class.post("/readings", get_params({ reading: reading_params }))
     end
 
     def get(id)

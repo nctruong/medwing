@@ -1,7 +1,7 @@
 module RedisServices
   class ReadingPool
     class << self
-      include RedisServices::Readings::Result
+      include RedisServices::Readings::Queries
       include RedisServices::Readings::IdStorage
       include RedisServices::Readings::LookingKey
 
