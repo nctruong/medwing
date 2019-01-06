@@ -28,25 +28,13 @@ module Sneakers
   end
 end
 
-
-module WorkerAdditions
+Bunny::Queue.class_eval do
   def publish(payload, opts)
-    Sneakers::Testing.push(opts[:to_queue], payload)
+    Sneakers::Testing.push(opts[:routing_key], payload)
   end
 end
-
-
-module QueuePublisher
-  extend self
-  def publish(payload, routing)
-    Sneakers::Testing.push(routing[:to_queue], payload)
-  end
-end
-
 
 RSpec.configure do |config|
-  config.include WorkerAdditions
-  config.include QueuePublisher
   config.include Sneakers::Testing
 
   config.before(:each) do

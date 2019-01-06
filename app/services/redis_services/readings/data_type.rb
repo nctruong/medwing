@@ -5,7 +5,7 @@ module RedisServices::Readings
     end
 
     def self.string_to_json(data)
-      JSON.parse(data&.gsub('=>',':'))
+      data.nil? ? {} : JSON.parse(data.gsub('=>',':'))
     end
   end
 end

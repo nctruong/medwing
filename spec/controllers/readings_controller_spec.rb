@@ -11,29 +11,32 @@ RSpec.describe ReadingsController, type: :controller do
         post :create, params: { reading: reading_params }
         expect(response.status).to eq(200)
       end
-
-      it 'stores enough temperature, humidity and battery charge'
-      it 'generates correct sequence number'
     end
 
-    context 'invalid household token' do
-      it 'returns unsuccessful status due to wrong token' do
-
+    context 'invalid thermostat id' do
+      it 'returns unsuccessful status due to not found thermostat id' do
+        post :create, params: { reading: reading_params.merge(thermostat_id: 1000) }
+        expect(response.status).to eq(400)
       end
 
-      it 'returns unsuccessful status due to lacking of token' do
-
+      it 'returns unsuccessful status due to lacking of thermostat id' do
+        post :create, params: { reading: reading_params.delete(:thermostat_id) }
+        expect(response.status).to eq(400)
       end
     end
   end
 
   describe '#GET' do
-    context 'valid household token' do
-      it 'returns same info after posting'
-    end
+    context 'invalid id' do
+      before(:each) { get :show, params: { id: 1000 } }
 
-    context 'invalid household token' do
-      it 'returns not found status'
+      it 'returns unsuccessful status due to id not exists' do
+        expect(response.status).to eq(404)
+      end
+
+      it 'returns unsuccessful status due to id not exists' do
+        expect(JSON.parse(response.body, symbolize_names: true)[:message]).to include('not found')
+      end
     end
   end
 end
