@@ -1,7 +1,7 @@
 module RedisServices::Readings
   module LookingKey
     def remove(id)
-      Redis.current.del(result_key(id))
+      Redis.current.keys(result_key(id)).each { |key| Redis.current.del(key) }
     end
   end
 end

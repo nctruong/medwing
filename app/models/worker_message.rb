@@ -1,0 +1,2 @@
+class WorkerMessage < ApplicationRecord
+end

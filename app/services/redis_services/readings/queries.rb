@@ -23,8 +23,9 @@ module RedisServices::Readings
     end
 
     def create(reading_id, result)
-      thermostat_id = result['thermostat_id']
-      Redis.current.set(result_key(reading_id, thermostat_id), result)
+      # byebug
+      raise "Thermostat id can't be nil" unless result[:thermostat_id].present?
+      Redis.current.set(result_key(reading_id, result[:thermostat_id]), result)
     end
   end
 end

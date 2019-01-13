@@ -21,7 +21,7 @@ module RedisServices
       private
 
       def result_key(reading_id, thermostat_id = nil)
-        "#{options[:value]}#{reading_id}#{thermostat_id.present? ? ('-' << thermostat_id.to_s) : ''}"
+        "#{options[:value]}#{reading_id}#{thermostat_id.present? ? ('-' << thermostat_id.to_s) : '-*'}"
       end
     end
   end

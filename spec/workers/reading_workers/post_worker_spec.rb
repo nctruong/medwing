@@ -6,13 +6,11 @@ RSpec.describe ReadingWorkers::PostWorker, type: :worker do
 
   let(:post_worker) { ReadingWorkers::PostWorker.new }
 
+  before(:each) do
+    create_sample_data(thermostat_quantity: 20, reading_quantity: 100)
+  end
+
   describe 'valid' do
-
-    before(:each) do
-      Redis.current.flushall
-      create_sample_data(thermostat_quantity: 20, reading_quantity: 100)
-    end
-
     include_examples :expected_reading_order
 
     it 'saves successfully records to db' do
@@ -27,6 +25,26 @@ RSpec.describe ReadingWorkers::PostWorker, type: :worker do
         post_worker.work(message)
         expect(Sneakers::Testing.messages_by_queue[RabbitmqServices::Reading::OPTIONS[:queues][:delete]].count).to eq(idx + 1)
       end
+    end
+
+    it 'returns :ack' do
+      Sneakers::Testing.messages_by_queue["readings.create"].each do |message|
+        expect(post_worker.work(message)).to eq(:ack)
+      end
+    end
+  end
+
+  describe 'invalid' do
+    it 'will not returns ack' do
+      message = { id: 'invalid' }
+      post_worker.work(message)
+      expect(post_worker.work(message)).to_not eq(:ack)
+    end
+
+    it 'stores error message' do
+      message = { id: 'invalid' }
+      post_worker.work(message)
+      expect(WorkerMessage.count).to eq(1)
     end
   end
 end

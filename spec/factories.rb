@@ -1,4 +1,9 @@
 FactoryBot.define do
+  factory :worker_message do
+    worker { "MyString" }
+    message { "MyString" }
+    error { "" }
+  end
   factory :reading do
     temperature { 30.2 }
     humidity { 50 }

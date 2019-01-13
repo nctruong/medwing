@@ -25,4 +25,18 @@ RSpec.describe ReadingWorkers::DeleteWorker, type: :worker do
       end
     end
   end
+
+  describe 'invalid' do
+    it 'will not returns ack' do
+      message = { id: 'invalid' }
+      delete_worker.work(message)
+      expect(delete_worker.work(message)).to_not eq(:ack)
+    end
+
+    it 'stores error message' do
+      message = { id: 'invalid' }
+      delete_worker.work(message)
+      expect(WorkerMessage.count).to eq(1)
+    end
+  end
 end

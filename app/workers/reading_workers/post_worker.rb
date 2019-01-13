@@ -12,6 +12,9 @@ module ReadingWorkers
       saved = Reading.create(readings_json)
       RabbitmqServices::Reading.delete(id) if saved
       ack! if saved
+    rescue
+      error = WorkerMessage.create(worker: self.class, message: options)
+      Rails.logger.warn { "#{self.class} encountered issues. Check #{error} for more info" }
     end
   end
 end

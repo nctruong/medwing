@@ -1,11 +1,3 @@
-# if Rails.env.test?
-#   byebug
-#   module Bunny
-#     def self.initialize;
-#       byebug
-#     end
-#   end
-# end
 unless Rails.env.test?
   begin
     $bunny_conn = Bunny.new

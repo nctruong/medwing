@@ -11,6 +11,9 @@ module ReadingWorkers
         RedisServices::ReadingPool.remove(id)
         ack!
       end
+    rescue
+      error = WorkerMessage.create(worker: self.class, message: id)
+      Rails.logger.warn { "#{self.class} encountered issues. Check #{error} for more info" }
     end
 
     private
