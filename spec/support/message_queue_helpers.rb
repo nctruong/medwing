@@ -28,11 +28,23 @@ module Sneakers
   end
 end
 
-Bunny::Queue.class_eval do
-  def publish(payload, opts)
+module FakeBunny
+  def self.publish(payload, opts)
     Sneakers::Testing.push(opts[:routing_key], payload)
   end
 end
+
+module Sneakers
+  class Publisher
+    def initialize(options = {}); end
+    def publish(payload, opts)
+      Sneakers::Testing.push(opts[:routing_key], payload)
+    end
+  end
+
+
+end
+$post_queue = FakeBunny
 
 RSpec.configure do |config|
   config.include Sneakers::Testing

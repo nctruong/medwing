@@ -7,7 +7,7 @@ module ReadingWorkers
 
     def work(id)
       if reading_exists?(id)
-        logger.debug { "#{self.class}: Deleting readings#id: #{id}" }
+        # logger.info { "#{self.class}: Deleting readings#id: #{id}" }
         RedisServices::ReadingPool.remove(id)
         ack!
       end
