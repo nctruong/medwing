@@ -7,7 +7,7 @@ module RabbitmqServices
       exchange: 'medwing.readings',
       delayed_exchange: {
         publisher: {
-          connection: $bunny_conn,
+          connection: $bunny_conn ||= Bunny.new,
           exchange: 'delayed.exchange',
           exchange_options: {
             type: 'x-delayed-message',
@@ -33,8 +33,10 @@ module RabbitmqServices
       end
 
       def delete(id)
+        p "id ================================================================= #{id}"
         Sneakers::Publisher.new(OPTIONS[:delayed_exchange][:publisher])
           .publish(id, headers: OPTIONS[:delayed_exchange][:headers], routing_key: OPTIONS[:queues][:delete]);
+        p "published =========================================================="
       end
 
       def get(id)

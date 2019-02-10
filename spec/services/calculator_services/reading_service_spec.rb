@@ -5,25 +5,16 @@ RSpec.describe CalculatorServices::ReadingService, type: :service do
   let(:post_worker) { ReadingWorkers::PostWorker.new }
   let(:delete_worker) { ReadingWorkers::DeleteWorker.new }
 
+  include_context :testing_data
+
   before(:each) do
-    @first_id = RabbitmqServices::Reading.post({
-      temperature: 32,
-      humidity: 38,
-      battery_charge: 80,
-      thermostat_id: thermostat.id
-    })
-    @second_id = RabbitmqServices::Reading.post({
-       temperature: 28,
-       humidity: 42,
-       battery_charge: 20,
-       thermostat_id: thermostat.id
-    })
+    create_data_for_average(thermostat)
     unless Sneakers::Testing.messages_by_queue.empty?
       post_worker.work(Sneakers::Testing.messages_by_queue[RabbitmqServices::Reading::OPTIONS[:queues][:create]].first)
     end
   end
 
-  describe 'first validation' do
+  describe 'validation' do
     it 'has first message which was saved in db' do
       expect(::Reading.count).to eq(1)
     end
@@ -32,7 +23,7 @@ RSpec.describe CalculatorServices::ReadingService, type: :service do
       expect(RedisServices::ReadingPool.find_by(reading_id: @first_id)).to_not eq(nil)
     end
 
-    it 'has first message which was deleted out from redis' do
+    it 'has first message which was deleted out from redis after it saved' do
       delete_worker.work(Sneakers::Testing.messages_by_queue[RabbitmqServices::Reading::OPTIONS[:queues][:delete]].first)
       expect(RedisServices::ReadingPool.find_by(reading_id: @first_id)).to eq(nil)
     end
@@ -43,19 +34,9 @@ RSpec.describe CalculatorServices::ReadingService, type: :service do
       delete_worker.work(Sneakers::Testing.messages_by_queue[RabbitmqServices::Reading::OPTIONS[:queues][:delete]].first)
       request_attributes = ['temperature', 'humidity', 'battery_charge']
       @result = CalculatorServices::ReadingService.average(request_attributes,
-                                                          thermostat_id: thermostat.id )
+                                                           thermostat_id: thermostat.id )
     end
 
-    it 'returns 30 as the average of temperature' do
-      expect(@result['temperature']).to eq(30)
-    end
-
-    it 'returns 40 as the average of humidity' do
-      expect(@result['humidity']).to eq(40)
-    end
-
-    it 'returns 50 as the average of battery charge' do
-      expect(@result['battery_charge']).to eq(50)
-    end
+    include_examples :expected_average
   end
 end

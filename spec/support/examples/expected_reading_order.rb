@@ -20,6 +20,22 @@ module Support
           [cur_idx, new_token]
         end
       end
+
+      RSpec.shared_examples :expected_average do
+        describe '#average' do
+          it 'returns 30 as the average of temperature' do
+            expect(@result['temperature']).to eq(30)
+          end
+
+          it 'returns 40 as the average of humidity' do
+            expect(@result['humidity']).to eq(40)
+          end
+
+          it 'returns 50 as the average of battery charge' do
+            expect(@result['battery_charge']).to eq(50)
+          end
+        end
+      end
     end
   end
 end

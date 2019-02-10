@@ -1,8 +1,9 @@
 require 'sneakers'
+Sneakers.clear!
 Sneakers.configure :amqp => 'amqp://guest:guest@127.0.0.1:5672',
     :vhost => '/',
     :exchange_type => :direct,
-    :timeout_job_after => 120,      # Maximal seconds to wait for job
+    :timeout_job_after => 360,      # Maximal seconds to wait for job
     :prefetch => 10,              # Grab 10 jobs together. Better speed.
     :threads => 10,               # Threadpool size (good to match prefetch)
     :durable => true,               # Is queue durable?

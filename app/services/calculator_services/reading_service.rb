@@ -7,7 +7,11 @@ module CalculatorServices
         pending_avg = average_from_pending_jobs(attributes, opts[:thermostat_id])
 
         attributes.each do |attr|
-          avg[attr] = ((db_avg[attr] || 0) + (pending_avg[attr] || 0)) / 2
+          if db_avg[attr] && pending_avg[attr]
+            avg[attr] = (db_avg[attr] + pending_avg[attr]) / 2
+          else
+            avg[attr] = db_avg[attr] || pending_avg[attr]
+          end
         end
         avg
       end

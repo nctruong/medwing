@@ -895,6 +895,52 @@
 							"nameLabel": {
 								"$ref": "AAAAAAFoB0vidE3ru8I="
 							}
+						},
+						{
+							"_type": "FCFlowView",
+							"_id": "AAAAAAFoUd59dfRTH3A=",
+							"_parent": {
+								"$ref": "AAAAAAFn+G8iRfzO3pc="
+							},
+							"model": {
+								"$ref": "AAAAAAFoUd59dPRRrJE="
+							},
+							"subViews": [
+								{
+									"_type": "EdgeLabelView",
+									"_id": "AAAAAAFoUd59dfRUIy4=",
+									"_parent": {
+										"$ref": "AAAAAAFoUd59dfRTH3A="
+									},
+									"model": {
+										"$ref": "AAAAAAFoUd59dPRRrJE="
+									},
+									"font": "Arial;13;0",
+									"left": 984,
+									"top": 176,
+									"width": 101.89892578125,
+									"height": 13,
+									"alpha": -0.8921338315278708,
+									"distance": 79.64923100695951,
+									"hostEdge": {
+										"$ref": "AAAAAAFoUd59dfRTH3A="
+									},
+									"edgePosition": 1,
+									"text": "calculate average"
+								}
+							],
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAFn+Hypt/4J8ts="
+							},
+							"tail": {
+								"$ref": "AAAAAAFn+HBsDPzdfsk="
+							},
+							"lineStyle": 2,
+							"points": "942:232;972:232;972:112",
+							"nameLabel": {
+								"$ref": "AAAAAAFoUd59dfRUIy4="
+							}
 						}
 					]
 				},
@@ -981,6 +1027,20 @@
 							"name": "write",
 							"source": {
 								"$ref": "AAAAAAFoB0t/y03bL9Q="
+							},
+							"target": {
+								"$ref": "AAAAAAFn+Hypt/4HWMo="
+							}
+						},
+						{
+							"_type": "FCFlow",
+							"_id": "AAAAAAFoUd59dPRRrJE=",
+							"_parent": {
+								"$ref": "AAAAAAFn+HBsDPzbP2A="
+							},
+							"name": "calculate average",
+							"source": {
+								"$ref": "AAAAAAFn+HBsDPzbP2A="
 							},
 							"target": {
 								"$ref": "AAAAAAFn+Hypt/4HWMo="

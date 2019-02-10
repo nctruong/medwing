@@ -11,5 +11,9 @@ module RedisServices::Readings
     def last_id
       Redis.current.get(options[:lastId])
     end
+
+    def remove(id)
+      Redis.current.keys(result_key(id)).each { |key| Redis.current.del(key) }
+    end
   end
 end

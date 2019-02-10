@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe ReadingWorkers::PostWorker, type: :worker do
   include_context :reading_params
-  include_context :worker_data
+  include_context :testing_data
 
   let(:post_worker) { ReadingWorkers::PostWorker.new }
 

@@ -3,7 +3,7 @@ module RedisServices
     class << self
       include RedisServices::Readings::Queries
       include RedisServices::Readings::IdStorage
-      include RedisServices::Readings::LookingKey
+      include RedisServices::Readings::Average
 
       # key: array of ids system is looking for
       # value: find by above ids
@@ -14,6 +14,7 @@ module RedisServices
           key: 'readings.look4ids',
           value: 'readings.',
           lastId: 'readings.last_id',
+          average: 'readings.average',
           pattern: ','
         }
       end
